@@ -1,11 +1,11 @@
-from uuid import uuid5
+from uuid import uuid4
 
 class Player:
   def __init__(self, database):
     self.db = database
 
   def create(self, name):
-    id = uuid5()
+    id = str(uuid4())
 
     query = "CREATE (:Player {id: $id, name: $name})"
     parameters = { "id": id, "name": name }
@@ -22,9 +22,9 @@ class Player:
     query = "MATCH (p:Player {name: $name}) RETURN p.name AS name, p.id AS id"
     parameters = { "name": name }
 
-    results = self.db.execute_query(query, parameters)
+    result = self.db.execute_query(query, parameters)[0]
 
-    return [(result["name"], result["id"]) for result in results]
+    return { "name": result["name"], "id": result["id"]}
   
   def update(self, old_name, new_name):
     query = "MATCH (p:Player {name: $old_name}) SET p.name = $new_name"

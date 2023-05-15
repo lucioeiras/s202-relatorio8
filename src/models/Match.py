@@ -1,4 +1,7 @@
 class Match:
+  def __init__(self, database):
+    self.db = database
+
   def create(self, id, house, visitor):
     query = "CREATE(:Match {id: $id, house_goals: $house_goals, visitor_goals: $visitor_goals})"
     parameters = { 
